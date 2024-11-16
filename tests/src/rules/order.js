@@ -3657,6 +3657,33 @@ context('TypeScript', function () {
               }
             ],
           }),
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'ignore'
+              }
+            ],
+          }),
           // Options: sortTypesAmongThemselves + newlines-between-types example #2 from the documentation (pass)
           test({
             code: `
@@ -3679,6 +3706,33 @@ context('TypeScript', function () {
             options: [
               {
                 groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'never',
+                'newlines-between-types': 'always'
+              }
+            ],
+          }),
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
                 sortTypesAmongThemselves: true,
                 'newlines-between': 'never',
                 'newlines-between-types': 'always'
