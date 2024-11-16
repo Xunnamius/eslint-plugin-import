@@ -466,6 +466,114 @@ However, if we add `sortTypesAmongThemselves: true`:
 
 The same example will pass.
 
+### `newlines-between-types: [ignore|always|always-and-inside-groups|never]`
+
+Enforces or forbids new lines between _type-only_ import groups. It is otherwise identical to [`newlines-between`](#newlines-between-ignorealwaysalways-and-inside-groupsnever).
+
+The default value is the value of `newlines-between`. When determining if a new line is enforceable or forbidden between the type-only imports and the normal imports, `newlines-between-types` takes precedence over `newlines-between`.
+
+Given the following settings:
+
+```ts
+{
+  groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+  sortTypesAmongThemselves: true,
+  'newlines-between': 'always'
+}
+```
+
+This example will fail the rule check:
+
+```ts
+import type A from "fs";
+import type B from "path";
+import type C from "../foo.js";
+import type D from "./bar.js";
+import type E from './';
+
+import a from "fs";
+import b from "path";
+
+import c from "../foo.js";
+
+import d from "./bar.js";
+
+import e from "./";
+```
+
+However, if we add `newlines-between-types: 'ignore'`:
+
+```ts
+{
+  groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+  sortTypesAmongThemselves: true,
+  'newlines-between': 'always',
+  'newlines-between-types': 'ignore'
+}
+```
+
+The same example will pass.
+
+Note the newline after `import type E from './';` but before `import a from "fs";`. This newline separates the type-only imports from the normal imports. Its existence is governed by `newlines-between-types`.
+
+For example, the following will pass even though there's a newline preceding the normal import and `newlines-between` is set to "never":
+
+```ts
+{
+  groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+  sortTypesAmongThemselves: true,
+  'newlines-between': 'never',
+  'newlines-between-types': 'always'
+}
+```
+
+```ts
+import type A from "fs";
+
+import type B from "path";
+
+import type C from "../foo.js";
+
+import type D from "./bar.js";
+
+import type E from './';
+
+import a from "fs";
+import b from "path";
+import c from "../foo.js";
+import d from "./bar.js";
+import e from "./";
+```
+
+While the following fails due to the newline between the last type import and the first normal import:
+
+```ts
+{
+  groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+  sortTypesAmongThemselves: true,
+  'newlines-between': 'always',
+  'newlines-between-types': 'never'
+}
+```
+
+```ts
+import type A from "fs";
+import type B from "path";
+import type C from "../foo.js";
+import type D from "./bar.js";
+import type E from './';
+
+import a from "fs";
+
+import b from "path";
+
+import c from "../foo.js";
+
+import d from "./bar.js";
+
+import e from "./";
+```
+
 ## Related
 
  - [`import/external-module-folders`] setting
