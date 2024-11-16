@@ -423,6 +423,49 @@ import path from 'path';
 import './styles.css';
 ```
 
+### `sortTypesAmongThemselves: true|false`
+
+Sort type-only imports separately from normal non-type imports.
+
+When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by `group`, `pathGroups`, etc.
+
+> This setting is only meaningful when `"type"` is included in `groups`.
+
+Given the following settings:
+
+```ts
+{
+  groups: ['type', 'builtin', 'parent', 'sibling', 'index']
+}
+```
+
+This example will fail the rule check:
+
+```ts
+import type A from "fs";
+import type B from "path";
+import type C from "../foo.js";
+import type D from "./bar.js";
+import type E from './';
+
+import a from "fs";
+import b from "path";
+import c from "../foo.js";
+import d from "./bar.js";
+import e from "./";
+```
+
+However, if we add `sortTypesAmongThemselves: true`:
+
+```ts
+{
+  groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+  sortTypesAmongThemselves: true
+}
+```
+
+The same example will pass.
+
 ## Related
 
  - [`import/external-module-folders`] setting
