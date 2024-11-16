@@ -427,7 +427,7 @@ import './styles.css';
 
 Sort type-only imports separately from normal non-type imports.
 
-When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by `group`, `pathGroups`, etc.
+When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by `groups`, `pathGroups`, etc.
 
 > This setting is only meaningful when `"type"` is included in `groups`.
 
