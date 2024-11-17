@@ -601,6 +601,207 @@ import d from "./bar.js";
 import e from "./";
 ```
 
+### `consolidateIslands: [inside-groups|never]`
+
+> \[!NOTE]
+>
+> This setting is only meaningful when `newlines-between` and/or `newlines-between-types` is set to `"always-and-inside-groups"`.
+
+Ensures imports spanning multiple lines are separated from other imports with a newline while single-line imports are grouped together (and the space between them consolidated) if they belong to the same [group](#groups-array) or [`pathGroups`](#pathgroups-array-of-objects).
+
+The default value is `"never"`, which makes this a no-op.
+
+For example, given the following settings:
+
+```ts
+{
+  'newlines-between': 'always-and-inside-groups',
+  consolidateIslands: 'inside-groups'
+}
+```
+
+This will fail the rule check:
+
+```ts
+var fs = require('fs');
+var path = require('path');
+var { util1, util2, util3 } = require('util');
+var async = require('async');
+var relParent1 = require('../foo');
+var {
+  relParent21,
+  relParent22,
+  relParent23,
+  relParent24,
+} = require('../');
+var relParent3 = require('../bar');
+var { sibling1,
+  sibling2, sibling3 } = require('./foo');
+var sibling2 = require('./bar');
+var sibling3 = require('./foobar');
+```
+
+While this will succeed (and is what `--fix` would yield):
+
+```ts
+var fs = require('fs');
+var path = require('path');
+var { util1, util2, util3 } = require('util');
+
+var async = require('async');
+
+var relParent1 = require('../foo');
+
+var {
+  relParent21,
+  relParent22,
+  relParent23,
+  relParent24,
+} = require('../');
+
+var relParent3 = require('../bar');
+
+var { sibling1,
+  sibling2, sibling3 } = require('./foo');
+
+var sibling2 = require('./bar');
+var sibling3 = require('./foobar');
+```
+
+Note the intragroup "islands" of grouped single-line imports, as well as multi-line imports, are surrounded by newlines. At the same time, note the typical newlines separating different groups (thanks to `{ 'newlines-between': 'always-and-inside-groups' }`) are still maintained.
+
+This rule also works with TypeScript and [`sortTypesAmongThemselves`](#sorttypesamongthemselves-truefalse).
+
+For example, given the following settings:
+
+```ts
+{
+  alphabetize: { order: 'asc' },
+  groups: ['external', 'internal', 'index', 'type'],
+  pathGroups: [
+    {
+      pattern: 'dirA/**',
+      group: 'internal',
+      position: 'after'
+    },
+    {
+      pattern: 'dirB/**',
+      group: 'internal',
+      position: 'before'
+    },
+    {
+      pattern: 'dirC/**',
+      group: 'internal',
+    },
+  ],
+  'newlines-between': 'always-and-inside-groups',
+  sortTypesAmongThemselves: true,
+  consolidateIslands: 'inside-groups',
+}
+```
+
+This will fail the rule check:
+
+```ts
+import type { AA,
+  BB, CC } from 'abc';
+
+import type { Z } from 'fizz';
+
+import type {
+  A,
+  B
+} from 'foo';
+
+import type { C2 } from 'dirB/Bar';
+
+import type {
+  D2,
+  X2,
+  Y2
+} from 'dirB/bar';
+
+import type { E2 } from 'dirB/baz';
+
+import type { C3 } from 'dirC/Bar';
+
+import type {
+  D3,
+  X3,
+  Y3
+} from 'dirC/bar';
+
+import type { E3 } from 'dirC/baz';
+
+import type { F3 } from 'dirC/caz';
+
+import type { C1 } from 'dirA/Bar';
+
+import type {
+  D1,
+  X1,
+  Y1
+} from 'dirA/bar';
+
+import type { E1 } from 'dirA/baz';
+
+import type { F } from './index.js';
+
+import type { G } from './aaa.js';
+
+import type { H } from './bbb';
+```
+
+While this will succeed (and is what `--fix` would yield):
+
+```ts
+import type { AA,
+  BB, CC } from 'abc';
+
+import type { Z } from 'fizz';
+
+import type {
+  A,
+  B
+} from 'foo';
+
+import type { C2 } from 'dirB/Bar';
+
+import type {
+  D2,
+  X2,
+  Y2
+} from 'dirB/bar';
+
+import type { E2 } from 'dirB/baz';
+
+import type { C3 } from 'dirC/Bar';
+
+import type {
+  D3,
+  X3,
+  Y3
+} from 'dirC/bar';
+
+import type { E3 } from 'dirC/baz';
+import type { F3 } from 'dirC/caz';
+
+import type { C1 } from 'dirA/Bar';
+
+import type {
+  D1,
+  X1,
+  Y1
+} from 'dirA/bar';
+
+import type { E1 } from 'dirA/baz';
+
+import type { F } from './index.js';
+
+import type { G } from './aaa.js';
+import type { H } from './bbb';
+```
+
 ## Related
 
  - [`import/external-module-folders`] setting

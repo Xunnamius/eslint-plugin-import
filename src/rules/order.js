@@ -555,7 +555,17 @@ function computeRank(context, ranks, importEntry, excludedImportTypes, isSorting
 function registerNode(context, importEntry, ranks, imported, excludedImportTypes, isSortingTypesAmongThemselves) {
   const rank = computeRank(context, ranks, importEntry, excludedImportTypes, isSortingTypesAmongThemselves);
   if (rank !== -1) {
-    imported.push({ ...importEntry, rank });
+    let importNode = importEntry.node;
+
+    if(importEntry.type === 'require' && importNode.parent.parent.type === 'VariableDeclaration') {
+      importNode = importNode.parent.parent;
+    }
+
+    imported.push({
+      ...importEntry,
+      rank,
+      isMultiline: importNode.loc.end.line !== importNode.loc.start.line
+    });
   }
 }
 
@@ -681,7 +691,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
   return undefined;
 }
 
-function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves) {
+function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves, isConsolidatingSpaceBetweenImports) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = getSourceCode(context).lines.slice(
       previousImport.node.loc.end.line,
@@ -738,9 +748,16 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
         !isNormalImportFollowingTypeOnlyImportAndRelevant ||
         newlinesBetweenTypeOnlyImports === 'never';
 
+      const isTheNewlineBetweenImportsInTheSameGroup = (distinctGroup && currentImport.rank === previousImport.rank) ||
+      (!distinctGroup && !isStartOfDistinctGroup);
+
+      // Let's try to cut down on linting errors sent to the user
+      let alreadyReported = false;
+
       if (shouldAssertNewlineBetweenGroups) {
         if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
           if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
+            alreadyReported = true;
             context.report({
               node: previousImport.node,
               message: 'There should be at least one empty line between import groups',
@@ -748,10 +765,8 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
             });
           }
         } else if (emptyLinesBetween > 0 && shouldAssertNoNewlineWithinGroup) {
-          if (
-            (distinctGroup && currentImport.rank === previousImport.rank) ||
-            (!distinctGroup && !isStartOfDistinctGroup)
-          ) {
+          if (isTheNewlineBetweenImportsInTheSameGroup) {
+            alreadyReported = true;
             context.report({
               node: previousImport.node,
               message: 'There should be no empty line within import group',
@@ -760,11 +775,40 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
           }
         }
       } else if (emptyLinesBetween > 0 && shouldAssertNoNewlineBetweenGroup) {
+        alreadyReported = true;
         context.report({
           node: previousImport.node,
           message: 'There should be no empty line between import groups',
           fix: removeNewLineAfterImport(context, currentImport, previousImport),
         });
+      }
+
+      if(!alreadyReported && isConsolidatingSpaceBetweenImports) {
+        if(emptyLinesBetween === 0 && currentImport.isMultiline) {
+          context.report({
+            node: previousImport.node,
+            message: 'There should be at least one empty line between this import and the multiline import that follows it',
+            fix: fixNewLineAfterImport(context, previousImport),
+          });
+        } else if(emptyLinesBetween === 0 && previousImport.isMultiline) {
+          context.report({
+            node: previousImport.node,
+            message: 'There should be at least one empty line between this multiline import and the import that follows it',
+            fix: fixNewLineAfterImport(context, previousImport),
+          });
+        } else if (
+          emptyLinesBetween > 0 &&
+          !previousImport.isMultiline &&
+          !currentImport.isMultiline &&
+          isTheNewlineBetweenImportsInTheSameGroup
+        ) {
+          context.report({
+            node: previousImport.node,
+            message:
+              'There should be no empty lines between this singleline import and the singleline import that follows it',
+            fix: removeNewLineAfterImport(context, currentImport, previousImport)
+          });
+        }
       }
     }
 
@@ -848,6 +892,12 @@ module.exports = {
               'never',
             ],
           },
+          consolidateIslands: {
+            enum: [
+              'inside-groups',
+              'never',
+            ],
+          },
           sortTypesAmongThemselves: {
             type: 'boolean',
             default: false,
@@ -910,6 +960,7 @@ module.exports = {
     const newlinesBetweenTypeOnlyImports = options['newlines-between-types'] || newlinesBetweenImports;
     const pathGroupsExcludedImportTypes = new Set(options.pathGroupsExcludedImportTypes || ['builtin', 'external', 'object']);
     const sortTypesAmongThemselves = options.sortTypesAmongThemselves;
+    const consolidateIslands = options.consolidateIslands || 'never';
 
     const named = {
       types: 'mixed',
@@ -1172,7 +1223,7 @@ module.exports = {
       'Program:exit'() {
         importMap.forEach((imported) => {
           if (newlinesBetweenImports !== 'ignore' || newlinesBetweenTypeOnlyImports !== 'ignore') {
-            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves);
+            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves, consolidateIslands === 'inside-groups' && (newlinesBetweenImports || newlinesBetweenTypeOnlyImports));
           }
 
           if (alphabetize.order !== 'ignore') {
