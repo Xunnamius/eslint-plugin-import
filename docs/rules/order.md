@@ -543,6 +543,10 @@ The same example will pass.
 
 Note the newline after `import type E from './';` but before `import a from "fs";`. This newline separates the type-only imports from the normal imports. Its existence is governed by `newlines-between-types`.
 
+> \[!IMPORTANT]
+>
+> Given [certain situations](#consolidateislands-inside-groupsnever), `consolidateIslands: true` will take precedence over `newlines-between-types: "never"`, if used, when it comes to the newline separating type-only imports from normal imports.
+
 For example, the following will pass even though there's a newline preceding the normal import and `newlines-between` is set to "never":
 
 ```ts
@@ -610,6 +614,20 @@ import e from "./";
 Ensures imports spanning multiple lines are separated from other imports with a newline while single-line imports are grouped together (and the space between them consolidated) if they belong to the same [group](#groups-array) or [`pathGroups`](#pathgroups-array-of-objects).
 
 The default value is `"never"`, which makes this a no-op.
+
+> \[!IMPORTANT]
+>
+> When all of the following are true:
+>   - `consolidateIslands` is set to `"inside-groups"`
+>   - [`newlines-between`](#newlines-between-ignorealwaysalways-and-inside-groupsnever) is set to `"always-and-inside-groups"`
+>   - [`newlines-between-types`](#newlines-between-types-ignorealwaysalways-and-inside-groupsnever) is set to `"never"`
+>   - [`sortTypesAmongThemselves`](#sorttypesamongthemselves-truefalse) is set to `true`
+>
+> Then `newlines-between-types` will yield to `consolidateIslands` and allow newlines to separate multiline imports and a single newline to separate all type-only imports from all normal imports. Other than that, `newlines-between-types: "never"` functions [as described](#newlines-between-types-ignorealwaysalways-and-inside-groupsnever).
+>
+> This configuration is useful to keep type-only imports stacked tightly
+> together at the bottom of your import block to preserve space while still
+> logically organizing normal imports for quick and pleasant reference.
 
 For example, given the following settings:
 
@@ -695,6 +713,7 @@ For example, given the following settings:
     },
   ],
   'newlines-between': 'always-and-inside-groups',
+  'newlines-between-types': 'never',
   sortTypesAmongThemselves: true,
   consolidateIslands: 'inside-groups',
 }
@@ -703,58 +722,95 @@ For example, given the following settings:
 This will fail the rule check:
 
 ```ts
+import c from 'Bar';
+import d from 'bar';
+import {
+  aa,
+  bb,
+  cc,
+  dd,
+  ee,
+  ff,
+  gg
+} from 'baz';
+import {
+  hh,
+  ii,
+  jj,
+  kk,
+  ll,
+  mm,
+  nn
+} from 'fizz';
+import a from 'foo';
+import b from 'dirA/bar';
+import index from './';
 import type { AA,
   BB, CC } from 'abc';
-
 import type { Z } from 'fizz';
-
 import type {
   A,
   B
 } from 'foo';
-
 import type { C2 } from 'dirB/Bar';
-
 import type {
   D2,
   X2,
   Y2
 } from 'dirB/bar';
-
 import type { E2 } from 'dirB/baz';
-
 import type { C3 } from 'dirC/Bar';
-
 import type {
   D3,
   X3,
   Y3
 } from 'dirC/bar';
-
 import type { E3 } from 'dirC/baz';
-
 import type { F3 } from 'dirC/caz';
-
 import type { C1 } from 'dirA/Bar';
-
 import type {
   D1,
   X1,
   Y1
 } from 'dirA/bar';
-
 import type { E1 } from 'dirA/baz';
-
 import type { F } from './index.js';
-
 import type { G } from './aaa.js';
-
 import type { H } from './bbb';
 ```
 
 While this will succeed (and is what `--fix` would yield):
 
 ```ts
+import c from 'Bar';
+import d from 'bar';
+
+import {
+  aa,
+  bb,
+  cc,
+  dd,
+  ee,
+  ff,
+  gg
+} from 'baz';
+
+import {
+  hh,
+  ii,
+  jj,
+  kk,
+  ll,
+  mm,
+  nn
+} from 'fizz';
+
+import a from 'foo';
+
+import b from 'dirA/bar';
+
+import index from './';
+
 import type { AA,
   BB, CC } from 'abc';
 
@@ -774,7 +830,6 @@ import type {
 } from 'dirB/bar';
 
 import type { E2 } from 'dirB/baz';
-
 import type { C3 } from 'dirC/Bar';
 
 import type {
@@ -785,7 +840,6 @@ import type {
 
 import type { E3 } from 'dirC/baz';
 import type { F3 } from 'dirC/caz';
-
 import type { C1 } from 'dirA/Bar';
 
 import type {
@@ -795,9 +849,7 @@ import type {
 } from 'dirA/bar';
 
 import type { E1 } from 'dirA/baz';
-
 import type { F } from './index.js';
-
 import type { G } from './aaa.js';
 import type { H } from './bbb';
 ```
