@@ -472,6 +472,8 @@ Enforces or forbids new lines between _type-only_ import groups. It is otherwise
 
 The default value is the value of `newlines-between`. When determining if a new line is enforceable or forbidden between the type-only imports and the normal imports, `newlines-between-types` takes precedence over `newlines-between`.
 
+If `sortTypesAmongThemselves` is not enabled, this option is a no-op.
+
 Given the following settings:
 
 ```ts
