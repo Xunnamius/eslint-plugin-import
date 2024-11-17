@@ -454,6 +454,8 @@ Sort type-only imports separately from normal non-type imports.
 
 When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by `groups`, `pathGroups`, etc.
 
+The default value is `false`.
+
 For example, given the following settings:
 
 ```ts
