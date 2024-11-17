@@ -739,32 +739,32 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
         newlinesBetweenTypeOnlyImports === 'never';
 
       if (shouldAssertNewlineBetweenGroups) {
-      if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
-        if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
-          context.report({
-            node: previousImport.node,
-            message: 'There should be at least one empty line between import groups',
-            fix: fixNewLineAfterImport(context, previousImport),
-          });
-        }
+        if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
+          if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
+            context.report({
+              node: previousImport.node,
+              message: 'There should be at least one empty line between import groups',
+              fix: fixNewLineAfterImport(context, previousImport),
+            });
+          }
         } else if (emptyLinesBetween > 0 && shouldAssertNoNewlineWithinGroup) {
           if (
             (distinctGroup && currentImport.rank === previousImport.rank) ||
             (!distinctGroup && !isStartOfDistinctGroup)
           ) {
-          context.report({
-            node: previousImport.node,
-            message: 'There should be no empty line within import group',
+            context.report({
+              node: previousImport.node,
+              message: 'There should be no empty line within import group',
               fix: removeNewLineAfterImport(context, currentImport, previousImport)
-          });
+            });
+          }
         }
-      }
       } else if (emptyLinesBetween > 0 && shouldAssertNoNewlineBetweenGroup) {
-      context.report({
-        node: previousImport.node,
-        message: 'There should be no empty line between import groups',
-        fix: removeNewLineAfterImport(context, currentImport, previousImport),
-      });
+        context.report({
+          node: previousImport.node,
+          message: 'There should be no empty line between import groups',
+          fix: removeNewLineAfterImport(context, currentImport, previousImport),
+        });
       }
     }
 
