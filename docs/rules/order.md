@@ -34,12 +34,13 @@ import type { Foo } from 'foo';
 
 In other words, if the [specifier](https://nodejs.org/api/esm.html#terminology)...
 
+- Has no corresponding identifiers (e.g. `import './my/thing.js'`) and `warnOnUnassignedImports` is disabled, or is an unsupported use of `require()`, it will be ignored entirely since the order of these imports may be important for their side-effects
 - Is an arcane TypeScript import declaration (e.g. `import log = console.log`), it will be considered **object**. However, note that external module references (e.g. `import x = require('z')`) are treated as normal `require()`s and import-exports (e.g. `export import w = y;`) are always ignored
 - Is a type-only import, `"type"` is in `groups`, and `sortTypesAmongThemselves` is disabled, it will be considered **type** (with additional implications if using `pathGroups` and `"type"` is in `pathGroupsExcludedImportTypes`)
 - Matches [`import/internal-regex`](../../README.md#importinternal-regex), it will be considered **internal**
 - Is an absolute path, it will be considered **unknown**
 - Has the name of a Node.js core module (using [is-core-module](https://www.npmjs.com/package/is-core-module)), it will be considered **builtin**
-- Matches ['import/core-modules'](../../README.md#importcore-modules), it will be considered **builtin**
+- Matches [`import/core-modules`](../../README.md#importcore-modules), it will be considered **builtin**
 - Is a path relative to the parent directory (e.g. starts with `../`), it will be considered **parent**
 - Is one of `['.', './', './index', './index.js']`, it will be considered **index**
 - Is a path relative to the current directory (e.g. starts with `./`), it will be considered **sibling**
@@ -48,7 +49,7 @@ In other words, if the [specifier](https://nodejs.org/api/esm.html#terminology).
 - Is a path pointing to a file within the current package's root directory (determined using [package-up](https://www.npmjs.com/package/package-up)), it will be considered **internal**
 - Has a name that looks like a scoped package (e.g. `@scoped/package-name`), it will be considered **external**
 - Has a name that starts with a word character, it will be considered **external**
-- Reaches this point, it will be ignored entirely, as the order of these imports may be important for their side-effects.
+- Reaches this point, it will be ignored entirely
 
 At the end of the process, if they co-exist in the same file, all top-level `require()` statements that haven't been ignored are shifted (with respect to their order) below any ES6 `import` or similar declarations. Finally, any type-only declarations are potentially reorganized according to [`sortTypesAmongThemselves`](#sorttypesamongthemselves-truefalse).
 
