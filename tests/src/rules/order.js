@@ -4158,6 +4158,76 @@ context('TypeScript', function () {
               },
             ],
           }),
+          // Ensure consolidateOptions: 'inside-groups', newlines-between: 'always-and-inside-groups', and newlines-between-types: 'never' do not fight for dominance
+          test({
+            code: `
+              import makeVanillaYargs from 'yargs/yargs';
+
+              import { createDebugLogger } from 'multiverse+rejoinder';
+
+              import { globalDebuggerNamespace } from 'rootverse+bfe:src/constant.ts';
+              import { ErrorMessage, type KeyValueEntry } from 'rootverse+bfe:src/error.ts';
+
+              import {
+                $artificiallyInvoked,
+                $canonical,
+                $exists,
+                $genesis
+              } from 'rootverse+bfe:src/symbols.ts';
+
+              import type {
+                Entries,
+                LiteralUnion,
+                OmitIndexSignature,
+                Promisable,
+                StringKeyOf
+              } from 'type-fest';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: {
+                  order: 'asc',
+                  orderImportKind: 'asc',
+                  caseInsensitive: true
+                },
+                named: {
+                  enabled: true,
+                  types: 'types-last'
+                },
+                groups: [
+                  'builtin',
+                  'external',
+                  'internal',
+                  ['parent', 'sibling', 'index'],
+                  ['object', 'type']
+                ],
+                pathGroups: [
+                  {
+                    pattern: 'multiverse{*,*/**}',
+                    group: 'external',
+                    position: 'after'
+                  },
+                  {
+                    pattern: 'rootverse{*,*/**}',
+                    group: 'external',
+                    position: 'after'
+                  },
+                  {
+                    pattern: 'universe{*,*/**}',
+                    group: 'external',
+                    position: 'after'
+                  },
+                ],
+                distinctGroup: true,
+                pathGroupsExcludedImportTypes: ['builtin', 'object'],
+                'newlines-between': 'always-and-inside-groups',
+                'newlines-between-types': 'never',
+                sortTypesAmongThemselves: true,
+                consolidateIslands: 'inside-groups'
+              },
+            ],
+          }),
         ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}

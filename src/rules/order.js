@@ -691,7 +691,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
   return undefined;
 }
 
-function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves, isConsolidatingSpaceBetweenImports) {
+function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports_, distinctGroup, isSortingTypesAmongThemselves, isConsolidatingSpaceBetweenImports) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = getSourceCode(context).lines.slice(
       previousImport.node.loc.end.line,
@@ -722,6 +722,18 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
 
     const isTypeOnlyImportAndRelevant =
       isTypeOnlyImport && isSortingTypesAmongThemselves;
+
+    // In the special case where newlinesBetweenTypeOnlyImports and
+    // consolidateIslands want the opposite thing, consolidateIslands wins
+    const newlinesBetweenTypeOnlyImports =
+      newlinesBetweenTypeOnlyImports_ === 'never' &&
+      isConsolidatingSpaceBetweenImports &&
+      isSortingTypesAmongThemselves &&
+      (isNormalImportFollowingTypeOnlyImportAndRelevant ||
+        previousImport.isMultiline ||
+        currentImport.isMultiline)
+        ? 'always-and-inside-groups'
+        : newlinesBetweenTypeOnlyImports_;
 
     const isNotIgnored =
       (isTypeOnlyImportAndRelevant &&
@@ -1223,7 +1235,17 @@ module.exports = {
       'Program:exit'() {
         importMap.forEach((imported) => {
           if (newlinesBetweenImports !== 'ignore' || newlinesBetweenTypeOnlyImports !== 'ignore') {
-            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves, consolidateIslands === 'inside-groups' && (newlinesBetweenImports || newlinesBetweenTypeOnlyImports));
+            makeNewlinesBetweenReport(
+              context,
+              imported,
+              newlinesBetweenImports,
+              newlinesBetweenTypeOnlyImports,
+              distinctGroup,
+              isSortingTypesAmongThemselves,
+              consolidateIslands === 'inside-groups' &&
+                (newlinesBetweenImports === 'always-and-inside-groups' ||
+                  newlinesBetweenTypeOnlyImports === 'always-and-inside-groups')
+            );
           }
 
           if (alphabetize.order !== 'ignore') {
