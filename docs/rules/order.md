@@ -425,11 +425,13 @@ import './styles.css';
 
 ### `sortTypesAmongThemselves: true|false`
 
+> \[!NOTE]
+>
+> This setting is only meaningful when `"type"` is included in `groups`.
+
 Sort type-only imports separately from normal non-type imports.
 
 When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by `groups`, `pathGroups`, etc.
-
-> This setting is only meaningful when `"type"` is included in `groups`.
 
 Given the following settings:
 
@@ -468,11 +470,13 @@ The same example will pass.
 
 ### `newlines-between-types: [ignore|always|always-and-inside-groups|never]`
 
+> \[!NOTE]
+>
+> This setting is only meaningful when `sortTypesAmongThemselves` is enabled.
+
 Enforces or forbids new lines between _type-only_ import groups. It is otherwise identical to [`newlines-between`](#newlines-between-ignorealwaysalways-and-inside-groupsnever).
 
 The default value is the value of `newlines-between`. When determining if a new line is enforceable or forbidden between the type-only imports and the normal imports, `newlines-between-types` takes precedence over `newlines-between`.
-
-If `sortTypesAmongThemselves` is not enabled, this option is a no-op.
 
 Given the following settings:
 
