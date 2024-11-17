@@ -454,7 +454,7 @@ Sort type-only imports separately from normal non-type imports.
 
 When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by `groups`, `pathGroups`, etc.
 
-Given the following settings:
+For example, given the following settings:
 
 ```ts
 {
@@ -462,7 +462,7 @@ Given the following settings:
 }
 ```
 
-This example will fail the rule check:
+This will fail the rule check:
 
 ```ts
 import type A from "fs";
@@ -499,7 +499,7 @@ Enforces or forbids new lines between _type-only_ import groups. It is otherwise
 
 The default value is the value of `newlines-between`. When determining if a new line is enforceable or forbidden between the type-only imports and the normal imports, `newlines-between-types` takes precedence over `newlines-between`.
 
-Given the following settings:
+For example, given the following settings:
 
 ```ts
 {
@@ -509,7 +509,7 @@ Given the following settings:
 }
 ```
 
-This example will fail the rule check:
+This will fail the rule check:
 
 ```ts
 import type A from "fs";
