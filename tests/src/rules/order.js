@@ -3115,7 +3115,6 @@ context('TypeScript', function () {
           }),
           // Option alphabetize: {order: 'asc'} with type group & path group
           test({
-            // only: true,
             code: `
               import c from 'Bar';
               import a from 'foo';
@@ -3145,7 +3144,6 @@ context('TypeScript', function () {
           }),
           // Option alphabetize: {order: 'asc'} with path group
           test({
-            // only: true,
             code: `
               import c from 'Bar';
               import type { A } from 'foo';
