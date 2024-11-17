@@ -32,6 +32,8 @@ import log = console.log;
 import type { Foo } from 'foo';
 ```
 
+<details><summary>Reveal technical details</summary>
+
 In other words, if the [specifier](https://nodejs.org/api/esm.html#terminology)...
 
 - Has no corresponding identifiers (e.g. `import './my/thing.js'`) and `warnOnUnassignedImports` is disabled, or is an unsupported use of `require()`, it will be ignored entirely since the order of these imports may be important for their side-effects
@@ -52,6 +54,8 @@ In other words, if the [specifier](https://nodejs.org/api/esm.html#terminology).
 - Reaches this point, it will be ignored entirely
 
 At the end of the process, if they co-exist in the same file, all top-level `require()` statements that haven't been ignored are shifted (with respect to their order) below any ES6 `import` or similar declarations. Finally, any type-only declarations are potentially reorganized according to [`sortTypesAmongThemselves`](#sorttypesamongthemselves-truefalse).
+
+</details>
 
 ## Fail
 
