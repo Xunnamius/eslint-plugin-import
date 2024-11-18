@@ -457,13 +457,13 @@ disabled with respect to the following kind of expressions:
   export { Readline } from "readline";
   ```
 
-- `require`
+- `require`:
 
   ```ts
   const { Readline } = require("readline");
   ```
 
-- `cjsExports`
+- `cjsExports`:
 
   ```ts
   module.exports.Readline = Readline;
