@@ -127,7 +127,7 @@ together at the end.
 
 #### Example
 
-```jsonc
+```jsoncc
 {
   "import/order": ["error", {
     "groups": [
@@ -202,7 +202,7 @@ enough, especially when using import aliases. `pathGroups` defines one or more
 
 #### Example
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "pathGroups": [
@@ -238,7 +238,7 @@ from being matched against [`pathGroups`][19] to prevent overeager sorting. Use
 
 #### Example
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "pathGroups": [
@@ -271,7 +271,7 @@ This behavior can be undesirable when using [`PathGroup.position`][13] to order 
 
 #### Example
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "distinctGroup": false,
@@ -392,7 +392,7 @@ Valid properties and their values include:
 
 Given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "alphabetize": {
@@ -478,7 +478,7 @@ Further, the `named.types` option allows you to specify the order of [import ide
 
 Given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "named": true,
@@ -521,7 +521,7 @@ with no corresponding identifiers (e.g. `import './my/thing.js'` or
 
 Given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "warnOnUnassignedImports": true
@@ -562,7 +562,7 @@ When enabled, the intragroup sort order of [type-only imports][6] will mirror th
 
 Given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
@@ -591,7 +591,7 @@ This happens because [type-only imports][6] are considered part of one global
 [`"type"` group](#how-imports-are-grouped) by default. However, if we set
 `sortTypesAmongThemselves` to `true`:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
@@ -624,7 +624,7 @@ precedence over [`newlines-between`][24].
 
 Given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
@@ -655,7 +655,7 @@ import e from "./";
 
 However, if we set `newlines-between-types` to `"ignore"`:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
@@ -676,7 +676,7 @@ Note the new line after `import type E from './';` but before `import a from "fs
 
 The next example will pass even though there's a new line preceding the normal import and [`newlines-between`][24] is set to `"never"`:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
@@ -707,7 +707,7 @@ import e from "./";
 
 While the following fails due to the new line between the last type import and the first normal import:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
@@ -766,7 +766,7 @@ When set to `"inside-groups"`, this ensures imports spanning multiple lines are 
 
 Given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "newlines-between": "always-and-inside-groups",
@@ -827,7 +827,7 @@ Note the intragroup "islands" of grouped single-line imports, as well as multi-l
 
 The same holds true for the next example; when given the following settings:
 
-```json
+```jsonc
 {
   "import/order": ["error", {
     "alphabetize": { "order": "asc" },
