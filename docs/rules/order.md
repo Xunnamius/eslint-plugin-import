@@ -161,7 +161,7 @@ Roughly speaking, the grouping algorithm is as follows:
    './my/thing.js'`), is otherwise "unassigned," or is an unsupported use of
    `require()`, and [`warnOnUnassignedImports`][5] is disabled, it will be
    ignored entirely since the order of these imports may be important for their
-   [side-effects](https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free)
+   [side-effects][31]
 2. If the import is part of an arcane TypeScript declaration (e.g. `import log = console.log`), it will be considered **object**. However, note that external module references (e.g. `import x = require('z')`) are treated as normal `require()`s and import-exports (e.g. `export import w = y;`) are ignored entirely
 3. If the import is [type-only][6], `"type"` is in `groups`, and [`sortTypesAmongThemselves`][7] is disabled, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
 4. If the import's specifier matches [`import/internal-regex`][28], it will be considered **internal**
