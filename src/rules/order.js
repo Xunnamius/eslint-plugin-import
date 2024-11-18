@@ -799,13 +799,13 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
         if(emptyLinesBetween === 0 && currentImport.isMultiline) {
           context.report({
             node: previousImport.node,
-            message: 'There should be at least one empty line between this import and the multiline import that follows it',
+            message: 'There should be at least one empty line between this import and the multi-line import that follows it',
             fix: fixNewLineAfterImport(context, previousImport),
           });
         } else if(emptyLinesBetween === 0 && previousImport.isMultiline) {
           context.report({
             node: previousImport.node,
-            message: 'There should be at least one empty line between this multiline import and the import that follows it',
+            message: 'There should be at least one empty line between this multi-line import and the import that follows it',
             fix: fixNewLineAfterImport(context, previousImport),
           });
         } else if (
@@ -817,7 +817,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
           context.report({
             node: previousImport.node,
             message:
-              'There should be no empty lines between this singleline import and the singleline import that follows it',
+              'There should be no empty lines between this single-line import and the single-line import that follows it',
             fix: removeNewLineAfterImport(context, currentImport, previousImport)
           });
         }
