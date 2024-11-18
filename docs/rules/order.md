@@ -117,11 +117,11 @@ This rule supports the following options (none of which are required):
 Valid values: `("builtin" | "external" | "internal" | "unknown" | "parent" | "sibling" | "index" | "object" | "type")[]` \
 Default: `["builtin", "external", "parent", "sibling", "index"]`
 
-Which kinds (or "groups") of imports are subject to ordering, and how to order
+Determines which imports are subject to ordering, and how to order
 them. The available groups are: `"builtin"`, `"external"`, `"internal"`,
 `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`, and `"type"`.
 
-The import order enforced by this rule is the same as the order of each element
+The import order enforced by this rule is the same as the order of each group
 in `groups`. Imports belonging to groups omitted from `groups` are lumped
 together at the end.
 
@@ -131,15 +131,15 @@ together at the end.
 {
   "import/order": ["error", {
     "groups": [
-      // Built-in types are first
+      // Imports of builtins are first
       "builtin",
-      // Then sibling and parent types. They can be mingled together
+      // Then sibling and parent imports. They can be mingled together
       ["sibling", "parent"],
-      // Then the index file
+      // Then index file imports
       "index",
       // Then any arcane TypeScript imports
       "object",
-      // Then the omitted: internal, external, type, unknown
+      // Then the omitted imports: internal, external, type, unknown
     ]
   }]
 }
@@ -147,7 +147,7 @@ together at the end.
 
 #### How Imports Are Grouped
 
-An import (a `ImportDeclaration`, `TSImportEqualsDeclaration`, or `require()` `CallExpression`) is grouped by its type (`require` vs `import`), its [specifier][4], and any corresponding identifiers.
+An import (a `ImportDeclaration`, `TSImportEqualsDeclaration`, or `require()` `CallExpression`) is grouped by its type (`"require"` vs `"import"`), its [specifier][4], and any corresponding identifiers.
 
 ```ts
 import { identifier1, identifier2 } from 'specifier1';
@@ -157,7 +157,11 @@ const identifier3 = require('specifier3');
 
 Roughly speaking, the grouping algorithm is as follows:
 
-1. If the import has no corresponding identifiers (e.g. `import './my/thing.js'`) or is otherwise "unassigned," and [`warnOnUnassignedImports`][5] is disabled, or is an unsupported use of `require()`, it will be ignored entirely since the order of these imports may be important for their side-effects
+1. If the import has no corresponding identifiers (e.g. `import
+   './my/thing.js'`), is otherwise "unassigned," or is an unsupported use of
+   `require()`, and [`warnOnUnassignedImports`][5] is disabled, it will be
+   ignored entirely since the order of these imports may be important for their
+   side-effects
 2. If the import is part of an arcane TypeScript declaration (e.g. `import log = console.log`), it will be considered **object**. However, note that external module references (e.g. `import x = require('z')`) are treated as normal `require()`s and import-exports (e.g. `export import w = y;`) are ignored entirely
 3. If the import is [type-only][6], `"type"` is in `groups`, and [`sortTypesAmongThemselves`][7] is disabled, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
 4. If the import's specifier matches [`import/internal-regex`][28], it will be considered **internal**
