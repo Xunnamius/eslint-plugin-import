@@ -4228,6 +4228,56 @@ context('TypeScript', function () {
               },
             ],
           }),
+          test({
+            code: `
+              import assert from 'node:assert';
+              import { isNativeError } from 'node:util/types';
+
+              import { runNoRejectOnBadExit } from '@-xun/run';
+              import { TrialError } from 'named-app-errors';
+              import { resolve as resolverLibrary } from 'resolve.exports';
+
+              import { toAbsolutePath, type AbsolutePath } from 'rootverse+project-utils:src/fs.ts';
+
+              import type { PackageJson } from 'type-fest';
+              // Some comment about remembering to do something
+              import type { XPackageJson } from 'rootverse:src/assets/config/_package.json.ts';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: {
+                  order: 'asc',
+                  orderImportKind: 'asc',
+                  caseInsensitive: true
+                },
+                named: {
+                  enabled: true,
+                  types: 'types-last'
+                },
+                groups: [
+                  'builtin',
+                  'external',
+                  'internal',
+                  ['parent', 'sibling', 'index'],
+                  ['object', 'type']
+                ],
+                pathGroups: [
+                  {
+                    pattern: 'rootverse{*,*/**}',
+                    group: 'external',
+                    position: 'after'
+                  },
+                ],
+                distinctGroup: true,
+                pathGroupsExcludedImportTypes: ['builtin', 'object'],
+                'newlines-between': 'always-and-inside-groups',
+                'newlines-between-types': 'never',
+                sortTypesAmongThemselves: true,
+                consolidateIslands: 'inside-groups'
+              },
+            ],
+          }),
         ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}

@@ -717,8 +717,8 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
     const isTypeOnlyImport = currentImport.node.importKind === 'type';
     const isPreviousImportTypeOnlyImport = previousImport.node.importKind === 'type';
 
-    const isNormalImportFollowingTypeOnlyImportAndRelevant =
-      !isTypeOnlyImport && isPreviousImportTypeOnlyImport && isSortingTypesAmongThemselves;
+    const isNormalImportNextToTypeOnlyImportAndRelevant =
+      isTypeOnlyImport !== isPreviousImportTypeOnlyImport && isSortingTypesAmongThemselves;
 
     const isTypeOnlyImportAndRelevant =
       isTypeOnlyImport && isSortingTypesAmongThemselves;
@@ -729,7 +729,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
       newlinesBetweenTypeOnlyImports_ === 'never' &&
       isConsolidatingSpaceBetweenImports &&
       isSortingTypesAmongThemselves &&
-      (isNormalImportFollowingTypeOnlyImportAndRelevant ||
+      (isNormalImportNextToTypeOnlyImportAndRelevant ||
         previousImport.isMultiline ||
         currentImport.isMultiline)
         ? 'always-and-inside-groups'
@@ -742,22 +742,22 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, ne
 
     if(isNotIgnored) {
       const shouldAssertNewlineBetweenGroups =
-        ((isTypeOnlyImportAndRelevant || isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+        ((isTypeOnlyImportAndRelevant || isNormalImportNextToTypeOnlyImportAndRelevant) &&
           (newlinesBetweenTypeOnlyImports === 'always' ||
             newlinesBetweenTypeOnlyImports === 'always-and-inside-groups')) ||
-        ((!isTypeOnlyImportAndRelevant && !isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+        ((!isTypeOnlyImportAndRelevant && !isNormalImportNextToTypeOnlyImportAndRelevant) &&
           (newlinesBetweenImports === 'always' ||
             newlinesBetweenImports === 'always-and-inside-groups'));
 
       const shouldAssertNoNewlineWithinGroup =
-        ((isTypeOnlyImportAndRelevant || isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+        ((isTypeOnlyImportAndRelevant || isNormalImportNextToTypeOnlyImportAndRelevant) &&
           (newlinesBetweenTypeOnlyImports !== 'always-and-inside-groups')) ||
-        ((!isTypeOnlyImportAndRelevant && !isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+        ((!isTypeOnlyImportAndRelevant && !isNormalImportNextToTypeOnlyImportAndRelevant) &&
           (newlinesBetweenImports !== 'always-and-inside-groups'));
 
       const shouldAssertNoNewlineBetweenGroup =
         !isSortingTypesAmongThemselves ||
-        !isNormalImportFollowingTypeOnlyImportAndRelevant ||
+        !isNormalImportNextToTypeOnlyImportAndRelevant ||
         newlinesBetweenTypeOnlyImports === 'never';
 
       const isTheNewlineBetweenImportsInTheSameGroup = (distinctGroup && currentImport.rank === previousImport.rank) ||
