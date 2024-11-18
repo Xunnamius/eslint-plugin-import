@@ -1,0 +1,46 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "mocha",
+      "program": "${workspaceFolder}/node_modules/.bin/nyc",
+      "args": [
+        "--silent",
+        "--exclude",
+        "**",
+        "./node_modules/.bin/mocha",
+        "--timeout",
+        "0",
+        "${relativeFile}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "BABEL_ENV": "test",
+        "NODE_OPTIONS": "--no-warnings",
+        "DEBUG_COLORS": "false"
+      },
+
+      // ! Note that these settings do NOT affect MANUALLY LAUNCHED debug
+      // ! terminals! To affect stepping while using the debug terminal
+      // ! manually, you'll need to configure settings.json (non-workspace) or
+      // ! *.code-workspace (workspace) and set
+      // ! `debug.javascript.terminalOptions.skipFiles/smartStep` appropriately.
+      // * You MAY need to reload vscode/vscode-jest before changes take effect!
+      // ? Set to false to step through node internals
+      "smartStep": true,
+      // ? Selectively comment out entries for deeper debugging
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**",
+        "!**/node_modules/eslint*/**"
+      ]
+    }
+  ]
+}
