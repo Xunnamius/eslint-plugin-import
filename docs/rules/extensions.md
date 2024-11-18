@@ -83,11 +83,11 @@ For example:
       {
         {
           pattern: "package-name-to-ignore",
-          group: "ignore",
+          action: "ignore",
         },
         {
           pattern: "bespoke+alias:{*,*/**}",
-          group: "enforce",
+          action: "enforce",
         }
       }
     ]
