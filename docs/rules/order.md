@@ -439,9 +439,9 @@ If set to `true` or `{ enabled: true }`, _all_ named imports must be ordered
 according to [`alphabetize`][30]. If set to `false` or `{ enabled:
 false }`, named imports can occur in any order.
 
-If `named` is set to `{ enabled: true, ... }`, and any of the properties
-`import`, `export`, `require`, or `cjsExports` are set to `false`, named
-ordering is disabled with respect to the following kind of expressions:
+If set to `{ enabled: true, ... }`, and any of the properties `import`,
+`export`, `require`, or `cjsExports` are set to `false`, named ordering is
+disabled with respect to the following kind of expressions:
 
 - `import`:
 
