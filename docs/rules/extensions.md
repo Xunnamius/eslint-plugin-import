@@ -58,6 +58,57 @@ Default value of `ignorePackages` is `false`.
 
 By default, `import type` and `export type` style imports/exports are ignored. If you want to check them as well, you can set the `checkTypeImports` option to `true`.
 
+Unfortunately, in more advanced linting setups, such as when employing custom
+specifier aliases (e.g. you're using `eslint-import-resolver-alias`, `paths` in
+`tsconfig.json`, etc), this rule can be too coarse-grained when determining
+which imports to ignore and on which to enforce the law. This is especially
+troublesome if you have import specifiers that [look like externals or
+builtins](./order.md#how-imports-are-grouped).
+
+Set `pathGroupOverrides` to force this rule to always ignore certain imports and
+never ignore others. `pathGroupOverrides` accepts an array of one or more [`PathGroupOverride`](#pathgroupoverride) objects.
+
+For example:
+
+```json
+"import/extensions": [
+  <severity>,
+  "never" | "always" | "ignorePackages",
+  {
+    ignorePackages: true | false,
+    pattern: {
+      <extension>: "never" | "always" | "ignorePackages"
+    },
+    pathGroupOverrides: [
+      {
+        {
+          pattern: "package-name-to-ignore",
+          group: "ignore",
+        },
+        {
+          pattern: "bespoke+alias:{*,*/**}",
+          group: "enforce",
+        }
+      }
+    ]
+  }
+]
+```
+
+> \[!NOTE]
+>
+> `pathGroupOverrides` is inspired by [`pathGroups` in
+> `'import/order'`](./order.md#pathgroups) and shares a similar interface. If you're
+> using `pathGroups` already, you may find `pathGroupOverrides` very useful.
+
+#### `PathGroupOverride`
+
+|     property     | required |          type          | description                                                                                                                     |
+| :--------------: | :------: | :--------------------: | ------------------------------------------------------------------------------------------------------------------------------- |
+|     `pattern`    |    ☑️    |        `string`        | [Minimatch pattern][16] for specifier matching                                                                                  |
+| `patternOptions` |          |        `object`        | [Minimatch options][17]; default: `{nocomment: true}`                                                                           |
+|      `action`     |    ☑️    | `"enforce" \| "ignore"` | What action to take on imports whose specifiers match `pattern`                                      |
+
 ### Exception
 
 When disallowing the use of certain extensions this rule makes an exception and allows the use of extension when the file would not be resolvable without extension.
@@ -190,3 +241,6 @@ export type { Foo } from './foo';
 If you are not concerned about a consistent usage of file extension.
 
 In the future, when this rule supports native node ESM resolution, and the plugin is configured to use native rather than transpiled ESM (a config option that is not yet available) - setting this to `always` will have no effect.
+
+[16]: https://www.npmjs.com/package/minimatch#features
+[17]: https://www.npmjs.com/package/minimatch#options
