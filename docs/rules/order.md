@@ -314,8 +314,8 @@ With the default [`groups`][18] setting, the following will fail the rule check:
 /* eslint import/order: ["error", {"newlines-between": "always"}] */
 import fs from 'fs';
 import path from 'path';
-import index from './';
 import sibling from './foo';
+import index from './';
 ```
 
 ```ts
@@ -323,8 +323,8 @@ import sibling from './foo';
 import fs from 'fs';
 
 import path from 'path';
-import index from './';
 import sibling from './foo';
+import index from './';
 ```
 
 ```ts
@@ -332,9 +332,9 @@ import sibling from './foo';
 import fs from 'fs';
 import path from 'path';
 
-import index from './';
-
 import sibling from './foo';
+
+import index from './';
 ```
 
 While this will pass:
@@ -344,9 +344,9 @@ While this will pass:
 import fs from 'fs';
 import path from 'path';
 
-import index from './';
-
 import sibling from './foo';
+
+import index from './';
 ```
 
 ```ts
@@ -355,17 +355,17 @@ import fs from 'fs';
 
 import path from 'path';
 
-import index from './';
-
 import sibling from './foo';
+
+import index from './';
 ```
 
 ```ts
 /* eslint import/order: ["error", {"newlines-between": "never"}] */
 import fs from 'fs';
 import path from 'path';
-import index from './';
 import sibling from './foo';
+import index from './';
 ```
 
 ### `alphabetize`
@@ -395,7 +395,6 @@ Given the following settings:
 ```json
 {
   "import/order": ["error", {
-    "named": true,
     "alphabetize": {
       "order": "asc",
       "caseInsensitive": true
@@ -557,7 +556,7 @@ Default: `false`
 
 Sort [type-only imports][6] separately from normal non-type imports.
 
-When enabled, the intragroup sort order of type-only imports will mirror the intergroup ordering of normal imports as defined by [`groups`][2], [`pathGroups`][8], etc.
+When enabled, the intragroup sort order of [type-only imports][6] will mirror the intergroup ordering of normal imports as defined by [`groups`][2], [`pathGroups`][8], etc.
 
 #### Example
 
@@ -566,12 +565,13 @@ Given the following settings:
 ```json
 {
   "import/order": ["error", {
-    "groups": ["type", "builtin", "parent", "sibling", "index"]
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "alphabetize": { "order": "asc" }
   }]
 }
 ```
 
-This will fail the rule check:
+This will fail the rule check even though it's logically ordered as we expect (builtins come before parents, parents come before siblings, siblings come before indices), the only difference is we separated type-only imports from normal imports:
 
 ```ts
 import type A from "fs";
@@ -587,12 +587,15 @@ import d from "./bar.js";
 import e from "./";
 ```
 
-However, if we set `sortTypesAmongThemselves` to `true`:
+This happens because [type-only imports][6] are considered part of one global
+[`"type"` group](#how-imports-are-grouped) by default. However, if we set
+`sortTypesAmongThemselves` to `true`:
 
 ```json
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "alphabetize": { "order": "asc" },
     "sortTypesAmongThemselves": true
   }]
 }
@@ -766,7 +769,6 @@ Given the following settings:
 ```json
 {
   "import/order": ["error", {
-    "groups": ["type", "builtin", "parent", "sibling", "index"],
     "newlines-between": "always-and-inside-groups",
     "consolidateIslands": "inside-groups"
   }]
@@ -848,11 +850,25 @@ The same holds true for the next example; when given the following settings:
     ],
     "newlines-between": "always-and-inside-groups",
     "newlines-between-types": "never",
+    "pathGroupsExcludedImportTypes": [],
     "sortTypesAmongThemselves": true,
     "consolidateIslands": "inside-groups"
   }]
 }
 ```
+
+> [!IMPORTANT]
+>
+> **Pay special attention to the value of
+> [`pathGroupsExcludedImportTypes`](#pathgroupsexcludedimporttypes)** in this
+> example's settings. Without it, the successful example below would fail. This is
+> because the imports with specifiers starting with "dirA/", "dirB/", and
+> "dirC/" are all [considered part of the `"external"`
+> group](#how-imports-are-grouped), and imports in that group are
+> excluded from [`pathGroups`](#pathgroups) matching by default.
+>
+> The fix is to remove `"external"` (and, in this example, the others) from
+> [`pathGroupsExcludedImportTypes`](#pathgroupsexcludedimporttypes).
 
 This will fail the rule check:
 

@@ -530,7 +530,7 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
-    // Option newlines-between: 'always' with multiline imports #1
+    // Option newlines-between: 'always' with multi-line imports #1
     test({
       code: `
         import path from 'path';
@@ -546,7 +546,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{ 'newlines-between': 'always' }],
     }),
-    // Option newlines-between: 'always' with multiline imports #2
+    // Option newlines-between: 'always' with multi-line imports #2
     test({
       code: `
         import path from 'path';
@@ -557,7 +557,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{ 'newlines-between': 'always' }],
     }),
-    // Option newlines-between: 'always' with multiline imports #3
+    // Option newlines-between: 'always' with multi-line imports #3
     test({
       code: `
         import foo
@@ -3119,11 +3119,11 @@ ruleTester.run('order', rule, {
           line: 5,
         },
         {
-          message: 'There should be at least one empty line between this import and the multiline import that follows it',
+          message: 'There should be at least one empty line between this import and the multi-line import that follows it',
           line: 6,
         },
         {
-          message: 'There should be at least one empty line between this multiline import and the import that follows it',
+          message: 'There should be at least one empty line between this multi-line import and the import that follows it',
           line: 12,
         },
         {
@@ -3131,7 +3131,7 @@ ruleTester.run('order', rule, {
           line: 13,
         },
         {
-          message: 'There should be at least one empty line between this multiline import and the import that follows it',
+          message: 'There should be at least one empty line between this multi-line import and the import that follows it',
           line: 15,
         },
       ],
@@ -3196,15 +3196,15 @@ ruleTester.run('order', rule, {
       ],
       errors: [
         {
-          message: 'There should be no empty lines between this singleline import and the singleline import that follows it',
+          message: 'There should be no empty lines between this single-line import and the single-line import that follows it',
           line: 2,
         },
         {
-          message: 'There should be no empty lines between this singleline import and the singleline import that follows it',
+          message: 'There should be no empty lines between this single-line import and the single-line import that follows it',
           line: 4,
         },
         {
-          message: 'There should be no empty lines between this singleline import and the singleline import that follows it',
+          message: 'There should be no empty lines between this single-line import and the single-line import that follows it',
           line: 24,
         },
       ],
@@ -3804,116 +3804,6 @@ context('TypeScript', function () {
               },
             ],
           }),
-          // Options: sortTypesAmongThemselves + newlines-between-types example #1 from the documentation (pass)
-          test({
-            code: `
-              import type A from "fs";
-              import type B from "path";
-              import type C from "../foo.js";
-              import type D from "./bar.js";
-              import type E from './';
-
-              import a from "fs";
-              import b from "path";
-
-              import c from "../foo.js";
-
-              import d from "./bar.js";
-
-              import e from "./";
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
-                sortTypesAmongThemselves: true,
-                'newlines-between': 'always',
-                'newlines-between-types': 'ignore'
-              }
-            ],
-          }),
-          test({
-            code: `
-              import a from "fs";
-              import b from "path";
-
-              import c from "../foo.js";
-
-              import d from "./bar.js";
-
-              import e from "./";
-
-              import type A from "fs";
-              import type B from "path";
-              import type C from "../foo.js";
-              import type D from "./bar.js";
-              import type E from './';
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
-                sortTypesAmongThemselves: true,
-                'newlines-between': 'always',
-                'newlines-between-types': 'ignore'
-              }
-            ],
-          }),
-          // Options: sortTypesAmongThemselves + newlines-between-types example #2 from the documentation (pass)
-          test({
-            code: `
-              import type A from "fs";
-              import type B from "path";
-
-              import type C from "../foo.js";
-
-              import type D from "./bar.js";
-
-              import type E from './';
-
-              import a from "fs";
-              import b from "path";
-              import c from "../foo.js";
-              import d from "./bar.js";
-              import e from "./";
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
-                sortTypesAmongThemselves: true,
-                'newlines-between': 'never',
-                'newlines-between-types': 'always'
-              }
-            ],
-          }),
-          test({
-            code: `
-              import a from "fs";
-              import b from "path";
-              import c from "../foo.js";
-              import d from "./bar.js";
-              import e from "./";
-
-              import type A from "fs";
-              import type B from "path";
-
-              import type C from "../foo.js";
-
-              import type D from "./bar.js";
-
-              import type E from './';
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
-                sortTypesAmongThemselves: true,
-                'newlines-between': 'never',
-                'newlines-between-types': 'always'
-              }
-            ],
-          }),
           // Option: sortTypesAmongThemselves: true and newlines-between-types: 'always-and-inside-groups' and consolidateIslands: 'inside-groups'
           test({
             code: `
@@ -4278,6 +4168,525 @@ context('TypeScript', function () {
               },
             ],
           }),
+
+          // Documentation passing example #1 for newlines-between
+          test({
+            code: `
+              import fs from 'fs';
+              import path from 'path';
+
+              import sibling from './foo';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                'newlines-between': 'always'
+              }
+            ],
+          }),
+          // Documentation passing example #2 for newlines-between
+          test({
+            code: `
+              import fs from 'fs';
+
+              import path from 'path';
+
+              import sibling from './foo';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                'newlines-between': 'always-and-inside-groups'
+              }
+            ],
+          }),
+          // Documentation passing example #3 for newlines-between
+          test({
+            code: `
+              import fs from 'fs';
+              import path from 'path';
+              import sibling from './foo';
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                'newlines-between': 'never'
+              }
+            ],
+          }),
+          // Documentation passing example #1 for alphabetize
+          test({
+            code: `
+              import blist2 from 'blist';
+              import blist from 'BList';
+              import * as classnames from 'classnames';
+              import aTypes from 'prop-types';
+              import React, { PureComponent } from 'react';
+              import { compose, apply } from 'xcompose';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "alphabetize": {
+                  "order": "asc",
+                  "caseInsensitive": true
+                }
+              }
+            ],
+          }),
+          // (not an example, but we also test caseInsensitive: false for completeness)
+          test({
+            code: `
+              import blist from 'BList';
+              import blist2 from 'blist';
+              import * as classnames from 'classnames';
+              import aTypes from 'prop-types';
+              import React, { PureComponent } from 'react';
+              import { compose, apply } from 'xcompose';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "alphabetize": {
+                  "order": "asc",
+                  "caseInsensitive": false
+                }
+              }
+            ],
+          }),
+          // Documentation passing example #1 for named
+          test({
+            code: `
+              import { apply, compose } from 'xcompose';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "named": true,
+                "alphabetize": {
+                  "order": "asc"
+                }
+              }
+            ],
+          }),
+          // Documentation passing example #1 for warnOnUnassignedImports
+          test({
+            code: `
+              import fs from 'fs';
+              import path from 'path';
+              import './styles.css';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "warnOnUnassignedImports": true
+              }
+            ],
+          }),
+          // Documentation passing example #1 for sortTypesAmongThemselves
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "groups": ["type", "builtin", "parent", "sibling", "index"],
+                "alphabetize": { "order": "asc" },
+                "sortTypesAmongThemselves": true
+              }
+            ],
+          }),
+          // (not an example, but we also test the reverse for completeness)
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "groups": ["builtin", "parent", "sibling", "index", "type"],
+                "sortTypesAmongThemselves": true
+              }
+            ],
+          }),
+          // Documentation passing example #1 for newlines-between-types
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'ignore'
+              }
+            ],
+          }),
+          // (not an example, but we also test the reverse for completeness)
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'ignore'
+              }
+            ],
+          }),
+          // Documentation passing example #2 for newlines-between-types
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'never',
+                'newlines-between-types': 'always'
+              }
+            ],
+          }),
+          // (not an example, but we also test the reverse for completeness)
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'never',
+                'newlines-between-types': 'always'
+              }
+            ],
+          }),
+          // Documentation passing example #1 for consolidateIslands
+          test({
+            code: `
+              var fs = require('fs');
+              var path = require('path');
+              var { util1, util2, util3 } = require('util');
+
+              var async = require('async');
+
+              var relParent1 = require('../foo');
+
+              var {
+                relParent21,
+                relParent22,
+                relParent23,
+                relParent24,
+              } = require('../');
+
+              var relParent3 = require('../bar');
+
+              var { sibling1,
+                sibling2, sibling3 } = require('./foo');
+
+              var sibling2 = require('./bar');
+              var sibling3 = require('./foobar');
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "newlines-between": "always-and-inside-groups",
+                "consolidateIslands": "inside-groups"
+              }
+            ],
+          }),
+          // Documentation passing example #2 for consolidateIslands
+          test({
+            code: `
+              import c from 'Bar';
+              import d from 'bar';
+
+              import {
+                aa,
+                bb,
+                cc,
+                dd,
+                ee,
+                ff,
+                gg
+              } from 'baz';
+
+              import {
+                hh,
+                ii,
+                jj,
+                kk,
+                ll,
+                mm,
+                nn
+              } from 'fizz';
+
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA,
+                BB, CC } from 'abc';
+
+              import type { Z } from 'fizz';
+
+              import type {
+                A,
+                B
+              } from 'foo';
+
+              import type { C2 } from 'dirB/Bar';
+
+              import type {
+                D2,
+                X2,
+                Y2
+              } from 'dirB/bar';
+
+              import type { E2 } from 'dirB/baz';
+              import type { C3 } from 'dirC/Bar';
+
+              import type {
+                D3,
+                X3,
+                Y3
+              } from 'dirC/bar';
+
+              import type { E3 } from 'dirC/baz';
+              import type { F3 } from 'dirC/caz';
+              import type { C1 } from 'dirA/Bar';
+
+              import type {
+                D1,
+                X1,
+                Y1
+              } from 'dirA/bar';
+
+              import type { E1 } from 'dirA/baz';
+              import type { F } from './index.js';
+              import type { G } from './aaa.js';
+              import type { H } from './bbb';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "alphabetize": { "order": "asc" },
+                "groups": ["external", "internal", "index", "type"],
+                "pathGroups": [
+                  {
+                    "pattern": "dirA/**",
+                    "group": "internal",
+                    "position": "after"
+                  },
+                  {
+                    "pattern": "dirB/**",
+                    "group": "internal",
+                    "position": "before"
+                  },
+                  {
+                    "pattern": "dirC/**",
+                    "group": "internal"
+                  }
+                ],
+                "newlines-between": "always-and-inside-groups",
+                "newlines-between-types": "never",
+                "pathGroupsExcludedImportTypes": [],
+                "sortTypesAmongThemselves": true,
+                "consolidateIslands": "inside-groups"
+              }
+            ],
+          }),
+          // (not an example, but we also test the reverse for completeness)
+          test({
+            code: `
+              import type { AA,
+                BB, CC } from 'abc';
+
+              import type { Z } from 'fizz';
+
+              import type {
+                A,
+                B
+              } from 'foo';
+
+              import type { C2 } from 'dirB/Bar';
+
+              import type {
+                D2,
+                X2,
+                Y2
+              } from 'dirB/bar';
+
+              import type { E2 } from 'dirB/baz';
+              import type { C3 } from 'dirC/Bar';
+
+              import type {
+                D3,
+                X3,
+                Y3
+              } from 'dirC/bar';
+
+              import type { E3 } from 'dirC/baz';
+              import type { F3 } from 'dirC/caz';
+              import type { C1 } from 'dirA/Bar';
+
+              import type {
+                D1,
+                X1,
+                Y1
+              } from 'dirA/bar';
+
+              import type { E1 } from 'dirA/baz';
+              import type { F } from './index.js';
+              import type { G } from './aaa.js';
+              import type { H } from './bbb';
+
+              import c from 'Bar';
+              import d from 'bar';
+
+              import {
+                aa,
+                bb,
+                cc,
+                dd,
+                ee,
+                ff,
+                gg
+              } from 'baz';
+
+              import {
+                hh,
+                ii,
+                jj,
+                kk,
+                ll,
+                mm,
+                nn
+              } from 'fizz';
+
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "alphabetize": { "order": "asc" },
+                "groups": ["type", "external", "internal", "index"],
+                "pathGroups": [
+                  {
+                    "pattern": "dirA/**",
+                    "group": "internal",
+                    "position": "after"
+                  },
+                  {
+                    "pattern": "dirB/**",
+                    "group": "internal",
+                    "position": "before"
+                  },
+                  {
+                    "pattern": "dirC/**",
+                    "group": "internal"
+                  }
+                ],
+                "newlines-between": "always-and-inside-groups",
+                "newlines-between-types": "never",
+                "pathGroupsExcludedImportTypes": [],
+                "sortTypesAmongThemselves": true,
+                "consolidateIslands": "inside-groups"
+              }
+            ],
+          }),
         ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}
@@ -4531,115 +4940,6 @@ context('TypeScript', function () {
               message: '`A` export should occur before export of `B`',
             }],
           }),
-          // Options: sortTypesAmongThemselves + newlines-between-types example #1 from the documentation (fail)
-          test({
-            code: `
-              import type A from "fs";
-              import type B from "path";
-              import type C from "../foo.js";
-              import type D from "./bar.js";
-              import type E from './';
-
-              import a from "fs";
-              import b from "path";
-
-              import c from "../foo.js";
-
-              import d from "./bar.js";
-
-              import e from "./";
-            `,
-            output: `
-              import type A from "fs";
-              import type B from "path";
-
-              import type C from "../foo.js";
-
-              import type D from "./bar.js";
-
-              import type E from './';
-
-              import a from "fs";
-              import b from "path";
-
-              import c from "../foo.js";
-
-              import d from "./bar.js";
-
-              import e from "./";
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
-                sortTypesAmongThemselves: true,
-                'newlines-between': 'always'
-              }
-            ],
-            errors: [
-              {
-                message: 'There should be at least one empty line between import groups',
-                line: 3,
-              },
-              {
-                message: 'There should be at least one empty line between import groups',
-                line: 4,
-              },
-              {
-                message: 'There should be at least one empty line between import groups',
-                line: 5,
-              },
-            ],
-          }),
-          // Options: sortTypesAmongThemselves + newlines-between-types example #2 from the documentation (fail)
-          test({
-            code: `
-              import type A from "fs";
-              import type B from "path";
-              import type C from "../foo.js";
-              import type D from "./bar.js";
-              import type E from './';
-
-              import a from "fs";
-              import b from "path";
-
-              import c from "../foo.js";
-
-              import d from "./bar.js";
-
-              import e from "./";
-            `,
-            output: `
-              import type A from "fs";
-              import type B from "path";
-              import type C from "../foo.js";
-              import type D from "./bar.js";
-              import type E from './';
-              import a from "fs";
-              import b from "path";
-
-              import c from "../foo.js";
-
-              import d from "./bar.js";
-
-              import e from "./";
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
-                sortTypesAmongThemselves: true,
-                'newlines-between': 'always',
-                'newlines-between-types': 'never'
-              }
-            ],
-            errors: [
-              {
-                message: 'There should be no empty line between import groups',
-                line: 6,
-              },
-            ],
-          }),
           // Option: sortTypesAmongThemselves: true and newlines-between-types: 'always-and-inside-groups' and consolidateIslands: 'inside-groups' with all newlines
           test({
             code: `
@@ -4828,17 +5128,17 @@ context('TypeScript', function () {
             errors: [
               {
                 message:
-                  'There should be no empty lines between this singleline import and the singleline import that follows it',
+                  'There should be no empty lines between this single-line import and the single-line import that follows it',
                 line: 2
               },
               {
                 message:
-                  'There should be no empty lines between this singleline import and the singleline import that follows it',
+                  'There should be no empty lines between this single-line import and the single-line import that follows it',
                 line: 60
               },
               {
                 message:
-                  'There should be no empty lines between this singleline import and the singleline import that follows it',
+                  'There should be no empty lines between this single-line import and the single-line import that follows it',
                 line: 76
               }
             ],
@@ -5008,15 +5308,15 @@ context('TypeScript', function () {
             ],
             errors: [
               {
-                message: 'There should be at least one empty line between this import and the multiline import that follows it',
+                message: 'There should be at least one empty line between this import and the multi-line import that follows it',
                 line: 3
               },
               {
-                message: 'There should be at least one empty line between this import and the multiline import that follows it',
+                message: 'There should be at least one empty line between this import and the multi-line import that follows it',
                 line: 4,
               },
               {
-                message: 'There should be at least one empty line between this multiline import and the import that follows it',
+                message: 'There should be at least one empty line between this multi-line import and the import that follows it',
                 line: 13,
               },
               {
@@ -5032,11 +5332,11 @@ context('TypeScript', function () {
                 line: 24,
               },
               {
-                message: 'There should be at least one empty line between this multiline import and the import that follows it',
+                message: 'There should be at least one empty line between this multi-line import and the import that follows it',
                 line: 25,
               },
               {
-                message: 'There should be at least one empty line between this import and the multiline import that follows it',
+                message: 'There should be at least one empty line between this import and the multi-line import that follows it',
                 line: 27,
               },
               {
@@ -5044,11 +5344,11 @@ context('TypeScript', function () {
                 line: 28,
               },
               {
-                message: 'There should be at least one empty line between this import and the multiline import that follows it',
+                message: 'There should be at least one empty line between this import and the multi-line import that follows it',
                 line: 32,
               },
               {
-                message: 'There should be at least one empty line between this multiline import and the import that follows it',
+                message: 'There should be at least one empty line between this multi-line import and the import that follows it',
                 line: 33,
               },
               {
@@ -5056,11 +5356,11 @@ context('TypeScript', function () {
                 line: 38,
               },
               {
-                message: 'There should be at least one empty line between this import and the multiline import that follows it',
+                message: 'There should be at least one empty line between this import and the multi-line import that follows it',
                 line: 39,
               },
               {
-                message: 'There should be at least one empty line between this multiline import and the import that follows it',
+                message: 'There should be at least one empty line between this multi-line import and the import that follows it',
                 line: 40,
               },
               {
@@ -5068,11 +5368,11 @@ context('TypeScript', function () {
                 line: 46,
               },
               {
-                message: 'There should be at least one empty line between this import and the multiline import that follows it',
+                message: 'There should be at least one empty line between this import and the multi-line import that follows it',
                 line: 47,
               },
               {
-                message: 'There should be at least one empty line between this multiline import and the import that follows it',
+                message: 'There should be at least one empty line between this multi-line import and the import that follows it',
                 line: 48,
               },
               {
@@ -5271,6 +5571,679 @@ context('TypeScript', function () {
                 line: 54,
               },
 
+            ],
+          }),
+
+          // Documentation failing example #1 for newlines-between
+          test({
+            code: `
+              import fs from 'fs';
+              import path from 'path';
+              import sibling from './foo';
+              import index from './';
+            `,
+            output: `
+              import fs from 'fs';
+              import path from 'path';
+
+              import sibling from './foo';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                'newlines-between': 'always'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 3,
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 4,
+              }
+            ],
+          }),
+          // Documentation failing example #2 for newlines-between
+          test({
+            code: `
+              import fs from 'fs';
+
+              import path from 'path';
+              import sibling from './foo';
+              import index from './';
+            `,
+            output: `
+              import fs from 'fs';
+
+              import path from 'path';
+
+              import sibling from './foo';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                'newlines-between': 'always-and-inside-groups'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 4,
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 5,
+              }
+            ],
+          }),
+          // Documentation failing example #3 for newlines-between
+          test({
+            code: `
+              import fs from 'fs';
+              import path from 'path';
+
+              import sibling from './foo';
+
+              import index from './';
+            `,
+            output: `
+              import fs from 'fs';
+              import path from 'path';
+              import sibling from './foo';
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                'newlines-between': 'never'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be no empty line between import groups',
+                line: 3,
+              },
+              {
+                message: 'There should be no empty line between import groups',
+                line: 5,
+              }
+            ],
+          }),
+          // Documentation failing example #1 for alphabetize
+          test({
+            code: `
+              import React, { PureComponent } from 'react';
+              import aTypes from 'prop-types';
+              import { compose, apply } from 'xcompose';
+              import * as classnames from 'classnames';
+              import blist2 from 'blist';
+              import blist from 'BList';
+            `,
+            // The reason why this output does not match the success example after being fixed is because eslint will leave overlapping errors alone, so only one import gets reordered when fixes are applied
+            output: `
+              import aTypes from 'prop-types';
+              import React, { PureComponent } from 'react';
+              import { compose, apply } from 'xcompose';
+              import * as classnames from 'classnames';
+              import blist2 from 'blist';
+              import blist from 'BList';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "alphabetize": {
+                  "order": "asc",
+                  "caseInsensitive": true
+                }
+              }
+            ],
+            errors: [
+              {
+                message: '`prop-types` import should occur before import of `react`',
+                line: 3,
+              },
+              {
+                message: '`classnames` import should occur before import of `react`',
+                line: 5,
+              },
+              {
+                message: '`blist` import should occur before import of `react`',
+                line: 6,
+              },
+              {
+                message: '`BList` import should occur before import of `react`',
+                line: 7,
+              }
+            ],
+          }),
+          // Documentation failing example #1 for named
+          test({
+            code: `
+              import { compose, apply } from 'xcompose';
+            `,
+            output: `
+              import { apply, compose } from 'xcompose';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "named": true,
+                "alphabetize": {
+                  "order": "asc"
+                }
+              }
+            ],
+            errors: [
+              {
+                message: '`apply` import should occur before import of `compose`',
+                line: 2,
+              }
+            ],
+          }),
+          // Documentation failing example #1 for warnOnUnassignedImports
+          test({
+            code: `
+              import fs from 'fs';
+              import './styles.css';
+              import path from 'path';
+            `,
+            // Should not be fixed
+            output: `
+              import fs from 'fs';
+              import './styles.css';
+              import path from 'path';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "warnOnUnassignedImports": true
+              }
+            ],
+            errors: [
+              {
+                message: '`path` import should occur before import of `./styles.css`',
+                line: 4,
+              }
+            ],
+          }),
+          // Documentation failing example #1 for sortTypesAmongThemselves
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            // This is the "correct" behavior, but it's the wrong outcome (expectedly)
+            output: `
+              import type C from "../foo.js";
+              import type A from "fs";
+              import type B from "path";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "groups": ["type", "builtin", "parent", "sibling", "index"],
+                "alphabetize": { "order": "asc" }
+              }
+            ],
+            errors: [
+              {
+                message: '`../foo.js` type import should occur before type import of `fs`',
+                line: 4,
+              },
+              {
+                message: '`./bar.js` type import should occur before type import of `fs`',
+                line: 5,
+              },
+              {
+                message: '`./` type import should occur before type import of `fs`',
+                line: 6,
+              },
+            ],
+          }),
+          // Documentation failing example #1 for newlines-between-types
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            output: `
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 3,
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 4,
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 5,
+              },
+            ],
+          }),
+          // Documentation failing example #2 for newlines-between-types
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            output: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'never'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be no empty line between import groups',
+                line: 6,
+              },
+            ],
+          }),
+          // Documentation failing example #1 for consolidateIslands
+          test({
+            code: `
+              var fs = require('fs');
+              var path = require('path');
+              var { util1, util2, util3 } = require('util');
+              var async = require('async');
+              var relParent1 = require('../foo');
+              var {
+                relParent21,
+                relParent22,
+                relParent23,
+                relParent24,
+              } = require('../');
+              var relParent3 = require('../bar');
+              var { sibling1,
+                sibling2, sibling3 } = require('./foo');
+              var sibling2 = require('./bar');
+              var sibling3 = require('./foobar');
+            `,
+            output: `
+              var fs = require('fs');
+              var path = require('path');
+              var { util1, util2, util3 } = require('util');
+
+              var async = require('async');
+
+              var relParent1 = require('../foo');
+
+              var {
+                relParent21,
+                relParent22,
+                relParent23,
+                relParent24,
+              } = require('../');
+
+              var relParent3 = require('../bar');
+
+              var { sibling1,
+                sibling2, sibling3 } = require('./foo');
+
+              var sibling2 = require('./bar');
+              var sibling3 = require('./foobar');
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "newlines-between": "always-and-inside-groups",
+                "consolidateIslands": "inside-groups"
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 4
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 5
+              },
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 6
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 12
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 13
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 15
+              }
+            ],
+          }),
+          // Documentation failing example #2 for consolidateIslands
+          test({
+            code: `
+              import c from 'Bar';
+              import d from 'bar';
+              import {
+                aa,
+                bb,
+                cc,
+                dd,
+                ee,
+                ff,
+                gg
+              } from 'baz';
+              import {
+                hh,
+                ii,
+                jj,
+                kk,
+                ll,
+                mm,
+                nn
+              } from 'fizz';
+              import a from 'foo';
+              import b from 'dirA/bar';
+              import index from './';
+              import type { AA,
+                BB, CC } from 'abc';
+              import type { Z } from 'fizz';
+              import type {
+                A,
+                B
+              } from 'foo';
+              import type { C2 } from 'dirB/Bar';
+              import type {
+                D2,
+                X2,
+                Y2
+              } from 'dirB/bar';
+              import type { E2 } from 'dirB/baz';
+              import type { C3 } from 'dirC/Bar';
+              import type {
+                D3,
+                X3,
+                Y3
+              } from 'dirC/bar';
+              import type { E3 } from 'dirC/baz';
+              import type { F3 } from 'dirC/caz';
+              import type { C1 } from 'dirA/Bar';
+              import type {
+                D1,
+                X1,
+                Y1
+              } from 'dirA/bar';
+              import type { E1 } from 'dirA/baz';
+              import type { F } from './index.js';
+              import type { G } from './aaa.js';
+              import type { H } from './bbb';
+            `,
+            output: `
+              import c from 'Bar';
+              import d from 'bar';
+
+              import {
+                aa,
+                bb,
+                cc,
+                dd,
+                ee,
+                ff,
+                gg
+              } from 'baz';
+
+              import {
+                hh,
+                ii,
+                jj,
+                kk,
+                ll,
+                mm,
+                nn
+              } from 'fizz';
+
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA,
+                BB, CC } from 'abc';
+
+              import type { Z } from 'fizz';
+
+              import type {
+                A,
+                B
+              } from 'foo';
+
+              import type { C2 } from 'dirB/Bar';
+
+              import type {
+                D2,
+                X2,
+                Y2
+              } from 'dirB/bar';
+
+              import type { E2 } from 'dirB/baz';
+              import type { C3 } from 'dirC/Bar';
+
+              import type {
+                D3,
+                X3,
+                Y3
+              } from 'dirC/bar';
+
+              import type { E3 } from 'dirC/baz';
+              import type { F3 } from 'dirC/caz';
+              import type { C1 } from 'dirA/Bar';
+
+              import type {
+                D1,
+                X1,
+                Y1
+              } from 'dirA/bar';
+
+              import type { E1 } from 'dirA/baz';
+              import type { F } from './index.js';
+              import type { G } from './aaa.js';
+              import type { H } from './bbb';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                "alphabetize": { "order": "asc" },
+                "groups": ["external", "internal", "index", "type"],
+                "pathGroups": [
+                  {
+                    "pattern": "dirA/**",
+                    "group": "internal",
+                    "position": "after"
+                  },
+                  {
+                    "pattern": "dirB/**",
+                    "group": "internal",
+                    "position": "before"
+                  },
+                  {
+                    "pattern": "dirC/**",
+                    "group": "internal"
+                  }
+                ],
+                "newlines-between": "always-and-inside-groups",
+                "newlines-between-types": "never",
+                "pathGroupsExcludedImportTypes": [],
+                "sortTypesAmongThemselves": true,
+                "consolidateIslands": "inside-groups"
+              }
+            ],
+            errors: [
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 3
+              },
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 4
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 13
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 22
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 23
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 24
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 25
+              },
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 27
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 28
+              },
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 32
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 33
+              },
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 39
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 40
+              },
+              {
+                message:
+                  'There should be at least one empty line between this import and the multi-line import that follows it',
+                line: 47
+              },
+              {
+                message:
+                  'There should be at least one empty line between this multi-line import and the import that follows it',
+                line: 48
+              }
             ],
           }),
 
