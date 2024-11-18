@@ -118,7 +118,7 @@ Valid values: `("builtin" | "external" | "internal" | "unknown" | "parent" | "si
 Default: `["builtin", "external", "parent", "sibling", "index"]`
 
 Determines which imports are subject to ordering, and how to order
-them. The available groups are: `"builtin"`, `"external"`, `"internal"`,
+them. The predefined groups are: `"builtin"`, `"external"`, `"internal"`,
 `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`, and `"type"`.
 
 The import order enforced by this rule is the same as the order of each group
@@ -185,7 +185,7 @@ At the end of the process, if they co-exist in the same file, all top-level `req
 Valid values: `PathGroup[]` \
 Default: `[]`
 
-Sometimes [the predefined groups][3] are not fine-grained
+Sometimes [the predefined groups][18] are not fine-grained
 enough, especially when using import aliases. `pathGroups` defines one or more
 [`PathGroup`][13]s relative to a predefined group. Imports are associated with a
 [`PathGroup`][13] based on path matching against the import specifier (using
@@ -197,12 +197,12 @@ enough, especially when using import aliases. `pathGroups` defines one or more
 
 #### `PathGroup`
 
-| property         | required | type                  | description                                                                                                                     |
-| :----------------: | :------: | :---------------------: | ------------------------------------------------------------------------------------------------------------------------------- |
-| `pattern`        |    ☑️    | `string`              | [Minimatch pattern][16] for specifier matching                                                                                  |
-| `patternOptions` |          | `object`              | [Minimatch options][17]; default: `{nocomment: true}`                                                                           |
-| `group`          |    ☑️    | [predefined group][3] | One of the [predefined groups][3] to which matching imports will be positioned relatively                                       |
-| `position`       |          | `"after" \| "before"` | Where, in relation to `group`, matching imports will be positioned; default: same position as `group` (neither before or after) |
+|     property     | required |          type          | description                                                                                                                     |
+| :--------------: | :------: | :--------------------: | ------------------------------------------------------------------------------------------------------------------------------- |
+|     `pattern`    |    ☑️    |        `string`        | [Minimatch pattern][16] for specifier matching                                                                                  |
+| `patternOptions` |          |        `object`        | [Minimatch options][17]; default: `{nocomment: true}`                                                                           |
+|      `group`     |    ☑️    | [predefined group][18] | One of the [predefined groups][18] to which matching imports will be positioned relatively                                      |
+|    `position`    |          |  `"after" \| "before"` | Where, in relation to `group`, matching imports will be positioned; default: same position as `group` (neither before or after) |
 
 #### Example
 
@@ -228,7 +228,7 @@ enough, especially when using import aliases. `pathGroups` defines one or more
 Valid values: `("builtin" | "external" | "internal" | "unknown" | "parent" | "sibling" | "index" | "object" | "type")[]` \
 Default: `["builtin", "external", "object"]`
 
-By default, imports in certain [groups][3] are excluded
+By default, imports in certain [groups][18] are excluded
 from being matched against [`pathGroups`][19] to prevent overeager sorting. Use
 `pathGroupsExcludedImportTypes` to modify which groups are excluded.
 
@@ -377,7 +377,7 @@ import sibling from './foo';
 Valid values: `{ order?: "asc" | "desc" | "ignore", orderImportKind?: "asc" | "desc" | "ignore", caseInsensitive?: boolean }` \
 Default: `{ order: "ignore", orderImportKind: "ignore", caseInsensitive: false }`
 
-Determine the sort order of imports within each [predefined group][3] or [`PathGroup`][19] alphabetically based on specifier.
+Determine the sort order of imports within each [predefined group][18] or [`PathGroup`][19] alphabetically based on specifier.
 
 > \[!NOTE]
 >
