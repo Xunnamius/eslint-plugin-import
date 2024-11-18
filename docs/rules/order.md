@@ -198,7 +198,7 @@ enough, especially when using import aliases. `pathGroups` defines one or more
 #### `PathGroup`
 
 | property         | required | type                  | description                                                                                                                     |
-| ---------------- | :------: | --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| :----------------: | :------: | :---------------------: | ------------------------------------------------------------------------------------------------------------------------------- |
 | `pattern`        |    ☑️    | `string`              | [Minimatch pattern][16] for specifier matching                                                                                  |
 | `patternOptions` |          | `object`              | [Minimatch options][17]; default: `{nocomment: true}`                                                                           |
 | `group`          |    ☑️    | [predefined group][3] | One of the [predefined groups][3] to which matching imports will be positioned relatively                                       |
