@@ -127,7 +127,7 @@ together at the end.
 
 #### Example
 
-```jsoncc
+```jsonc
 {
   "import/order": ["error", {
     "groups": [
@@ -164,9 +164,9 @@ Roughly speaking, the grouping algorithm is as follows:
 5. If the import's specifier is an absolute path, it will be considered **unknown**
 6. If the import's specifier has the name of a Node.js core module (using [is-core-module][10]), it will be considered **builtin**
 7. If the import's specifier matches [`import/core-modules`][11], it will be considered **builtin**
-8. If the import's specifier is a path relative to the parent directory (e.g. starts with `../`), it will be considered **parent**
+8. If the import's specifier is a path relative to the parent directory of its containing file (e.g. starts with `../`), it will be considered **parent**
 9. If the import's specifier is one of `['.', './', './index', './index.js']`, it will be considered **index**
-10. If the import's specifier is a path relative to the current directory (e.g. starts with `./`), it will be considered **sibling**
+10. If the import's specifier is a path relative to its containing file (e.g. starts with `./`), it will be considered **sibling**
 11. If the import's specifier is a path pointing to a file outside the current package's root directory (determined using [package-up][12]), it will be considered **external**
 12. If the import's specifier matches [`import/external-module-folders`][29] (defaults to matching anything pointing to files within the current package's `node_modules` directory), it will be considered **external**
 13. If the import's specifier is a path pointing to a file within the current package's root directory (determined using [package-up][12]), it will be considered **internal**
@@ -756,7 +756,7 @@ When set to `"inside-groups"`, this ensures imports spanning multiple lines are 
 > - [`newlines-between-types`][27] is set to `"never"`
 > - [`sortTypesAmongThemselves`][7] is set to `true`
 >
-> Then [`newlines-between-types`][27] will yield to `consolidateIslands` and allow new lines to separate multiline imports and a single new line to separate all [type-only imports][6] from all normal imports. Other than that, [`newlines-between-types: "never"`][27] functions as described.
+> Then [`newlines-between-types`][27] will yield to `consolidateIslands` and allow new lines to separate multi-line imports and a single new line to separate all [type-only imports][6] from all normal imports. Other than that, [`newlines-between-types: "never"`][27] functions as described.
 >
 > This configuration is useful to keep type-only imports stacked tightly
 > together at the bottom of your import block to preserve space while still
