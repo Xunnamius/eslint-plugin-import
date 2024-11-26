@@ -81,14 +81,12 @@ For example:
     },
     pathGroupOverrides: [
       {
-        {
-          pattern: "package-name-to-ignore",
-          action: "ignore",
-        },
-        {
-          pattern: "bespoke+alias:{*,*/**}",
-          action: "enforce",
-        }
+        pattern: "package-name-to-ignore",
+        action: "ignore",
+      },
+      {
+        pattern: "bespoke+alias:{*,*/**}",
+        action: "enforce",
       }
     ]
   }

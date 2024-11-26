@@ -6,7 +6,7 @@
 
 Enforce a convention in the order of `require()` / `import` statements.
 
-With the [`groups`][2] option set to `["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]` the order is as shown in the following example:
+With the [`groups`][18] option set to `["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]` the order is as shown in the following example:
 
 ```ts
 // 1. node "builtin" modules
@@ -157,7 +157,7 @@ const identifier3 = require('specifier3');
 
 Roughly speaking, the grouping algorithm is as follows:
 
-1. If the import has no corresponding identifiers (e.g. `import'./my/thing.js'`), is otherwise "unassigned," or is an unsupported use of `require()`, and [`warnOnUnassignedImports`][5] is disabled, it will be ignored entirely since the order of these imports may be important for their [side-effects][31]
+1. If the import has no corresponding identifiers (e.g. `import './my/thing.js'`), is otherwise "unassigned," or is an unsupported use of `require()`, and [`warnOnUnassignedImports`][5] is disabled, it will be ignored entirely since the order of these imports may be important for their [side-effects][31]
 2. If the import is part of an arcane TypeScript declaration (e.g. `import log = console.log`), it will be considered **object**. However, note that external module references (e.g. `import x = require('z')`) are treated as normal `require()`s and import-exports (e.g. `export import w = y;`) are ignored entirely
 3. If the import is [type-only][6], `"type"` is in `groups`, and [`sortTypesAmongThemselves`][7] is disabled, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
 4. If the import's specifier matches [`import/internal-regex`][28], it will be considered **internal**
@@ -298,7 +298,7 @@ Enforces or forbids new lines between import groups.
 
 - If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden
 
-  > \[!TIP]
+  > [!TIP]
   >
   > To prevent multiple lines between imports, the [`no-multiple-empty-lines` rule][21], or a tool like [Prettier][22], can be used.
 
@@ -552,11 +552,11 @@ Default: `false`
 
 > \[!NOTE]
 >
-> This setting is only meaningful when `"type"` is included in [`groups`][2].
+> This setting is only meaningful when `"type"` is included in [`groups`][18].
 
 Sort [type-only imports][6] separately from normal non-type imports.
 
-When enabled, the intragroup sort order of [type-only imports][6] will mirror the intergroup ordering of normal imports as defined by [`groups`][2], [`pathGroups`][8], etc.
+When enabled, the intragroup sort order of [type-only imports][6] will mirror the intergroup ordering of normal imports as defined by [`groups`][18], [`pathGroups`][8], etc.
 
 #### Example
 
@@ -612,9 +612,9 @@ Default: the value of [`newlines-between`][24]
 >
 > This setting is only meaningful when [`sortTypesAmongThemselves`][7] is enabled.
 
-Enforces or forbids new lines between _[type-only][6] import groups_, which only
-exist when [`sortTypesAmongThemselves`][7] is enabled. `newlines-between-types`
-is otherwise functionally identical to [`newlines-between`][24].
+`newlines-between-types` is functionally identical to [`newlines-between`][24]
+except it only enforces or forbids new lines between _[type-only][6] import
+groups_, which exist only when [`sortTypesAmongThemselves`][7] is enabled.
 
 In addition, when determining if a new line is enforceable or forbidden between
 the type-only imports and the normal imports, `newlines-between-types` takes
@@ -745,7 +745,7 @@ Default: `"never"`
 >
 > This setting is only meaningful when [`newlines-between`][24] and/or [`newlines-between-types`][27] is set to `"always-and-inside-groups"`.
 
-When set to `"inside-groups"`, this ensures imports spanning multiple lines are separated from other imports with a new line while single-line imports are grouped together (and the space between them consolidated) if they belong to the same [group][2] or [`pathGroups`][26].
+When set to `"inside-groups"`, this ensures imports spanning multiple lines are separated from other imports with a new line while single-line imports are grouped together (and the space between them consolidated) if they belong to the same [group][18] or [`pathGroups`][26].
 
 > \[!IMPORTANT]
 >
@@ -1012,7 +1012,6 @@ import type { H } from './bbb';
 - [`import/core-modules`][11]
 
 [1]: https://eslint.org/docs/latest/user-guide/command-line-interface#--fix
-[2]: #groups-string
 [3]: #how-imports-are-grouped
 [4]: https://nodejs.org/api/esm.html#terminology
 [5]: #warnonunassignedimports
